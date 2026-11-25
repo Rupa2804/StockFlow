@@ -6,11 +6,11 @@ export async function login(credentials) {
 }
 
 export async function register(registration) {
-  const { data } = await apiClient.post('/api/v1/auth/register', registration)
+  const { data } = await apiClient.post('auth/register', registration)
   return data
 }
 
 export async function getCurrentUser() {
-  const { data } = await apiClient.get('/api/v1/auth/me')
+  const { data } = await apiClient.get('auth/me')
   return data
 }
