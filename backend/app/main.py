@@ -16,7 +16,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://stock-flow-rupa2804.vercel.app","https://stock-flow-theta-murex.vercel.app"],
+    allow_origins=["https://stock-flow-theta-murex.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
