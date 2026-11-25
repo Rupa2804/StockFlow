@@ -1,17 +1,22 @@
-# Environment
-.venv/
+# Environment variables
 .env
 .env.*
 !.env.example
 
 # Python
+.venv/
 __pycache__/
 *.py[cod]
-
-# Testing
 .pytest_cache/
 
-# Database
+# Database files
 *.db
 *.sqlite3
 *.dump
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+
+# Logs
+*.log
