@@ -6,11 +6,11 @@ import {
 } from '../utils/sessionToken'
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || import.meta.env.VITE_API_URL,
+  baseURL: `${import.meta.env.VITE_API_URL}/api/v1`,
   headers: {
     Accept: 'application/json',
   },
-})
+});
 
 apiClient.interceptors.request.use((config) => {
   const token = getAccessToken()
