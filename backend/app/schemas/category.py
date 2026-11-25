@@ -14,6 +14,7 @@ class CategoryRead(BaseModel):
     id: int
     name: str
     description: str | None
+    organization_id: int
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)

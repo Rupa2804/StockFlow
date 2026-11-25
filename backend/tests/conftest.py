@@ -1,7 +1,7 @@
 import os
 
-os.environ.setdefault("DATABASE_URL", "sqlite+pysqlite:///:memory:")
-os.environ.setdefault("JWT_SECRET_KEY", "test-only-signing-key-for-local-tests")
+os.environ["DATABASE_URL"] = "sqlite+pysqlite:///:memory:"
+os.environ["JWT_SECRET_KEY"] = "test-only-signing-key-for-local-tests"
 
 import pytest
 from fastapi.testclient import TestClient

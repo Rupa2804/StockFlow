@@ -10,11 +10,17 @@ from app.schemas.stock_movement import StockMovementCreate
 def record_stock_movement(
     db: Session,
     product_id: int,
+    organization_id: int,
     user: User,
     request: StockMovementCreate,
 ) -> StockMovement:
     product = db.scalar(
-        select(Product).where(Product.id == product_id).with_for_update()
+        select(Product)
+        .where(
+            Product.id == product_id,
+            Product.organization_id == organization_id,
+        )
+        .with_for_update()
     )
     if product is None:
         raise LookupError("Product not found")
@@ -29,6 +35,7 @@ def record_stock_movement(
     movement = StockMovement(
         product_id=product.id,
         user_id=user.id,
+        organization_id=organization_id,
         movement_type=request.movement_type,
         quantity=request.quantity,
         note=request.note,
@@ -39,10 +46,15 @@ def record_stock_movement(
     return movement
 
 
-def list_product_movements(db: Session, product_id: int) -> list[StockMovement]:
+def list_product_movements(
+    db: Session,
+    product_id: int,
+    organization_id: int,
+) -> list[StockMovement]:
     statement = (
         select(StockMovement)
         .where(StockMovement.product_id == product_id)
+        .where(StockMovement.organization_id == organization_id)
         .order_by(StockMovement.created_at.desc(), StockMovement.id.desc())
     )
     return list(db.scalars(statement).all())

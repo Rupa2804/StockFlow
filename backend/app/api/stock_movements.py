@@ -3,7 +3,6 @@ from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_current_user
 from app.database import get_db
-from app.models.product import Product
 from app.models.stock_movement import StockMovement
 from app.models.user import User
 from app.schemas.stock_movement import StockMovementCreate, StockMovementRead
@@ -11,6 +10,7 @@ from app.services.inventory_service import (
     list_product_movements,
     record_stock_movement,
 )
+from app.services.product_service import get_product
 
 
 router = APIRouter(tags=["stock"])
@@ -28,7 +28,13 @@ def add_stock_movement(
     current_user: User = Depends(get_current_user),
 ) -> StockMovement:
     try:
-        return record_stock_movement(db, product_id, current_user, request)
+        return record_stock_movement(
+            db,
+            product_id,
+            current_user.organization_id,
+            current_user,
+            request,
+        )
     except LookupError as exc:
         db.rollback()
         raise HTTPException(
@@ -50,11 +56,16 @@ def add_stock_movement(
 def get_stock_movements(
     product_id: int,
     db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
 ) -> list[StockMovement]:
-    if db.get(Product, product_id) is None:
+    if get_product(db, product_id, current_user.organization_id) is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Product not found",
         )
-    movements = list_product_movements(db, product_id)
+    movements = list_product_movements(
+        db,
+        product_id,
+        current_user.organization_id,
+    )
     return movements

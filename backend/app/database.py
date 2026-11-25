@@ -22,13 +22,3 @@ def get_db() -> Generator[Session, None, None]:
         yield db
     finally:
         db.close()
-
-
-def create_db_tables() -> None:
-    from app.models.category import Category
-    from app.models.product import Product
-    from app.models.stock_movement import StockMovement
-    from app.models.user import User
-
-    models = (Category, Product, StockMovement, User)
-    Base.metadata.create_all(bind=engine, tables=[model.__table__ for model in models])

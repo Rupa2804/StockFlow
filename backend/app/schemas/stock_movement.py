@@ -16,6 +16,7 @@ class StockMovementRead(BaseModel):
     id: int
     product_id: int
     user_id: int
+    organization_id: int
     movement_type: Literal["in", "out"]
     quantity: int
     note: str | None

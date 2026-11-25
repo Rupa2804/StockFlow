@@ -22,7 +22,14 @@ router = APIRouter(prefix="/auth", tags=["authentication"])
 def register(request: RegisterRequest, db: Session = Depends(get_db)) -> User:
     try:
         return create_user(db, request)
+    except ValueError as exc:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(exc),
+        ) from exc
     except IntegrityError as exc:
+        db.rollback()
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="An account with this email already exists",
