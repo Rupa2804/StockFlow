@@ -25,9 +25,10 @@ def get_db() -> Generator[Session, None, None]:
 
 
 def create_db_tables() -> None:
-    from app.models.category import Category  # noqa: F401
-    from app.models.product import Product  # noqa: F401
-    from app.models.stock_movement import StockMovement  # noqa: F401
-    from app.models.user import User  # noqa: F401
+    from app.models.category import Category
+    from app.models.product import Product
+    from app.models.stock_movement import StockMovement
+    from app.models.user import User
 
-    Base.metadata.create_all(bind=engine)
+    models = (Category, Product, StockMovement, User)
+    Base.metadata.create_all(bind=engine, tables=[model.__table__ for model in models])
